@@ -400,6 +400,7 @@ function update_iperf3_intervals()
 function update_iperf3_end()
 {
   local JSON="$1"
+  local test_run="$2"
   local i=0
   local sender=true
   local test_type=""
@@ -417,14 +418,14 @@ function update_iperf3_end()
         do
 	      #TCP non-reverse sender
           line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6","$7","$8","$9","$10","$11",null,null,null,null,null" }' )
-          echo "$TEST_ID,$sender,$line"
+          echo "$TEST_ID,$test_run,$sender,$line"
           ((i++))
         done > tmp.csv
 		
 	    #insert interval streams data to mysql
         while read line
         do
-          mysql_cmd=$(echo "INSERT INTO $table (test_id,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
+          mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
           
           execute_mysql_cmd "$mysql_cmd"	  
         done < tmp.csv
@@ -435,12 +436,12 @@ function update_iperf3_end()
         do
 	      #TCP non-reverse receiver
           line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,null,null,null,null,null" }' )
-          echo "$TEST_ID,$sender,$line"
+          echo "$TEST_ID,$test_run,$sender,$line"
           ((i++))
         done > tmp.csv
 		while read line
         do
-          mysql_cmd=$(echo "INSERT INTO $table (test_id,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
+          mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
           
           execute_mysql_cmd "$mysql_cmd"	  
         done < tmp.csv
@@ -452,12 +453,12 @@ function update_iperf3_end()
         do
 	      #TCP reverse sender
           line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,null,null,null,null,null" }' )
-          echo "$TEST_ID,$sender,$line"
+          echo "$TEST_ID,$test_run,$sender,$line"
           ((i++))
         done > tmp.csv
 		while read line
         do
-          mysql_cmd=$(echo "INSERT INTO $table (test_id,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
+          mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
           
           execute_mysql_cmd "$mysql_cmd"	  
         done < tmp.csv
@@ -468,12 +469,12 @@ function update_iperf3_end()
       do
 	    #TCP reverse receiver
         line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,null,null,null,null,null" }' )
-        echo "$TEST_ID,$sender,$line"
+        echo "$TEST_ID,$test_run,$sender,$line"
         ((i++))
       done > tmp.csv
       while read line
       do
-        mysql_cmd=$(echo "INSERT INTO $table (test_id,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
+        mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
           
         execute_mysql_cmd "$mysql_cmd"	  
       done < tmp.csv
@@ -487,9 +488,9 @@ function update_iperf3_end()
 	  
 	line=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.sum_sent | [.[]] | @csv' )
 	line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null" }' )
-    line=$(echo	"$TEST_ID,\"$test_type\",$line")
+    line=$(echo	"$TEST_ID,$test_run,\"$test_type\",$line")
 	
-	mysql_cmd=$(echo "INSERT INTO $table (test_id,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
+	mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
 	  
 	execute_mysql_cmd "$mysql_cmd"
 	  
@@ -498,8 +499,8 @@ function update_iperf3_end()
 	  
 	line=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.sum_received  | [.[]] | @csv' )
 	line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5",null,null,null,null,null" }' )
-	line=$(echo	"$TEST_ID,\"$test_type\",$line")
-	mysql_cmd=$(echo "INSERT INTO $table (test_id,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
+	line=$(echo	"$TEST_ID,$test_run,\"$test_type\",$line")
+	mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
 	  
 	execute_mysql_cmd "$mysql_cmd"
 	
@@ -516,12 +517,12 @@ function update_iperf3_end()
     do
 	  #UDP
       line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,"$7","$8","$9","$10","$11 }' )
-      echo "$TEST_ID,$sender,$line"
+      echo "$TEST_ID,$test_run,$sender,$line"
       ((i++))
     done > tmp.csv
 	while read line
     do
-      mysql_cmd=$(echo "INSERT INTO $table (test_id,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
+      mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,sender,socket,start,end,seconds,bytes,bits_per_second,retransmits,max_snd_cwnd,max_rtt,min_rtt,mean_rtt,jitter_ms,lost_packets,packets,lost_percent,out_of_order) VALUES ($line);")
           
       execute_mysql_cmd "$mysql_cmd"	  
     done < tmp.csv
@@ -533,8 +534,8 @@ function update_iperf3_end()
 	
 	line=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.sum | [.[]] | @csv' )
 	line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,"$7","$8","$9 }' )
-	line=$(echo	"$TEST_ID,\"$test_type\",$line")
-	mysql_cmd=$(echo "INSERT INTO $table (test_id,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
+	line=$(echo	"$TEST_ID,$test_run,\"$test_type\",$line")
+	mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,type,start,end,seconds,bytes,bits_per_second,retransmits,jitter_ms,lost_packets,packets,lost_percent) VALUES ($line);")
 	  
 	execute_mysql_cmd "$mysql_cmd"  
   fi
@@ -542,8 +543,8 @@ function update_iperf3_end()
   # update cpu_utilization_percent
   table="iperf3_end_cpu_utilization"  
   line=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.cpu_utilization_percent | [.[]] | @csv' )
-  line=$(echo "$TEST_ID,$line")
-  mysql_cmd=$(echo "INSERT INTO $table (test_id,host_total,host_user,host_system,remote_total,remote_user,remote_system) VALUES ($line);")
+  line=$(echo "$TEST_ID,$test_run,$line")
+  mysql_cmd=$(echo "INSERT INTO $table (test_id,test_run,host_total,host_user,host_system,remote_total,remote_user,remote_system) VALUES ($line);")
 	  
   execute_mysql_cmd "$mysql_cmd"  
 }
@@ -615,13 +616,12 @@ do
   #echo intervals sum data for test run $m
   #echo $INTERVALS_SUM_JSON
   
-  #Print out 'end' data in case of last run only
-  if [[ $m == $TEST_RUNS ]]
-  then
-    echo last run end
-	END_JSON=$(echo $TOTAL_JSON | $(echo $PATH_TO_JQ) -r '.end ')
-    # echo $END_JSON
-	update_iperf3_end "$END_JSON"
-  fi
+  #Print out 'end' data in
+  
+  echo "test run $m end"
+  END_JSON=$(echo $TOTAL_JSON | $(echo $PATH_TO_JQ) -r '.end ')
+  # echo $END_JSON
+  update_iperf3_end "$END_JSON" "$m"
+  
   sleep $IPERF3_TEST_RUN_DELAY
 done
