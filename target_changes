@@ -12,3 +12,7 @@
 - exit after ssh errors?
 - add sctp protocol
 - add native iperf switches
+- update help
+- standalone conf file
+- add Grafana metrics
+- add Grafana variables
