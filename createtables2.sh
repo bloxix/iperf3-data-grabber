@@ -7,13 +7,15 @@ DB_USER="heiko"
 DB_PASSWORD="Heiko1234*" 
 DB_NAME="iperf3_data"
 
-mysql_cmd=( "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+mysql -u${DB_USER} -p${DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} "
 
-"CREATE TABLE iperf3_general_info( \
+mysql_cmd=( "CREATE TABLE iperf3_general_info( \
    test_id int not null primary key, \
    test_time datetime, \
    test_name varchar(255), \
    test_user varchar(255), \
+   iperf3_client varchar(20), \
+   iperf3_server varchar(20), \
    test_runs int, \
    args varchar(255) \
 );"
@@ -181,8 +183,7 @@ mysql_cmd=( "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
    remote_user double, \
    remote_system double \
 );" )
- 
-#mysql_cmd=( "$c1" "$c2" "$c3" "$c4" "$c5" "$c6" "$c7" "$c8" "$c9" "$c10" "$c11" )
+
 
 for i in "${mysql_cmd[@]}"
 do
