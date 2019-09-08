@@ -1,0 +1,3 @@
+# here somne additional things to be done, possibly in this release:
+- kill server processes at the end of the test
+- add ping tests in a mysql table...
