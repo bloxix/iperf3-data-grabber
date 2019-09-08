@@ -2,3 +2,9 @@
 - kill server processes at the end of the test
 - add ping tests in a mysql table...
 - add new version flag
+- add Grafana dashboard panels
+- update existing Grafana dashboards
+- use standalone conf file
+- add some php-admin for mysql
+- optimize code
+- address udp errors
