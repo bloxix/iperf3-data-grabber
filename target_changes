@@ -9,3 +9,4 @@
 - optimize code
 - address udp errors
 - update wiki
+- exit after ssh errors?
