@@ -10,3 +10,5 @@
 - address udp errors
 - update wiki
 - exit after ssh errors?
+- add sctp protocol
+- add native iperf switches
