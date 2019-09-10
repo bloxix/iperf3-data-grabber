@@ -1,6 +1,7 @@
 # here somne additional things to be done, possibly in this release:
-- kill server processes at the end of the test
-- add ping tests in a mysql table...
+- kill server processes at the end of the test (done, not tested)
+- add ping tests in a mysql table... (ongoing)
+- add time column to end tables and update grabber script
 - add new version flag
 - add Grafana dashboard panels
 - update existing Grafana dashboards
