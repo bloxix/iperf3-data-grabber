@@ -128,6 +128,7 @@ mysql_cmd=( "CREATE TABLE iperf3_general_info( \
 
    "CREATE TABLE iperf3_end_streams (
    test_id int not null,
+   test_run int,
    FOREIGN KEY fk_test_id(test_id)
    REFERENCES iperf3_general_info(test_id)
    ON UPDATE CASCADE
@@ -153,6 +154,7 @@ mysql_cmd=( "CREATE TABLE iperf3_general_info( \
 
    "CREATE TABLE iperf3_end_sum (
    test_id int not null,
+   test_run int,
    FOREIGN KEY fk_test_id(test_id)
    REFERENCES iperf3_general_info(test_id)
    ON UPDATE CASCADE
@@ -172,6 +174,7 @@ mysql_cmd=( "CREATE TABLE iperf3_general_info( \
 
    "CREATE TABLE iperf3_end_cpu_utilization ( \
    test_id int not null, \
+   test_run int, \
    FOREIGN KEY fk_test_id(test_id) \
    REFERENCES iperf3_general_info(test_id) \
    ON UPDATE CASCADE \
@@ -182,7 +185,23 @@ mysql_cmd=( "CREATE TABLE iperf3_general_info( \
    remote_total double, \
    remote_user double, \
    remote_system double \
-);" )
+);" 
+
+   "CREATE TABLE iperf3_ping_table ( \
+   time datetime, \
+   test_id int not null,   \
+   test_run int, \
+   FOREIGN KEY fk_test_id(test_id) \
+   REFERENCES iperf3_general_info(test_id) \
+   ON UPDATE CASCADE \
+   ON DELETE CASCADE, \
+   remote_host varchar(20), \
+   icmp_rtt double, \
+);" 
+
+
+
+)
 
 
 for i in "${mysql_cmd[@]}"

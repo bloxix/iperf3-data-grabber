@@ -31,7 +31,7 @@
 #Define Default values used by IPERF and other script variables
 ################################################################################################
 
-IPERF3_LOCAL_RUN=0                     # Set to 0 to run the iperf client from the local machine
+IPERF3_LOCAL_RUN=1                     # 0 = run the iperf client from the local machine, 1 = ssh into client & server
 IPERF3_CLIENT='127.0.0.1'              # IPERF3_CLIENT ip address
 IPERF3_CLIENT_USER='heiko'             # used to login to IPERF3_CLIENT
 IPERF3_SERVER='127.0.0.1'              # IPERF3_SERVER ip address
@@ -45,6 +45,7 @@ IPERF3_OTHER=''                        # other iperf switches must be enclosed b
 IPERF3_ARGS=''
 IPERF3_REVERSE=0                       # reverse test = 1, default=0
 IPERF3_TEST_RUN_DELAY=1                # delay in seconds between test runs, default=1
+IPERF3_RUN_PING=1                      # set to 1 run ping tests
 
 # Other default values
 TEST_RUNS=1                            # Number of test runs, default=1
@@ -185,13 +186,10 @@ function execute_mysql_cmd()
 }
 
 ################################################################################################
-# update start tables                                                                          #
+# update general info table                                                                          #
 ################################################################################################
-function update_iperf3_start()
+function update_iperf3_general_info()
 {
-  local JSON="$1"
-  local run="$2"
-
   local table="iperf3_general_info"
   local test_time=$(date +'%F %T')
   local test_name=$TEST_NAME
@@ -206,10 +204,22 @@ function update_iperf3_start()
   local mysql_cmd="INSERT INTO "$table" (test_id,test_time,test_name,test_user,iperf3_client,iperf3_server,test_runs,args) VALUES (\""$test_id"\",\""$test_time"\","\"$test_name"\","\"$test_user"\","\"$iperf3_client"\","\"$iperf3_server"\","\"$test_runs"\","\"$args"\");"
 
   execute_mysql_cmd "$mysql_cmd"
-   
+}
+
+
+################################################################################################
+# update start tables                                                                          #
+################################################################################################
+function update_iperf3_start()
+{
+  local JSON="$1"
+  local run="$2"
+  
+  local test_id=$TEST_ID
+
   #update the start table
 
-  table="iperf3_start"
+  local table="iperf3_start"
   local version=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.version ')
   local system_info=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.system_info ')
   local cookie=$(echo $JSON | $(echo $PATH_TO_JQ) -r '.cookie ')
@@ -339,9 +349,7 @@ function update_iperf3_intervals()
 	  #UDP non-reverse
 	  echo $TOTAL_JSON | $(echo $PATH_TO_JQ) -r '.intervals | .[] | .streams[] | [.[]] | @csv' | while read -r line
       do
-        #line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","null,null,null,"$6",null,"$7 }' )
-		#echo $line >> tmp3.csv
-		line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,"$7",null,"$8 }' )
+        line=$(echo $line | awk -F, '{ print $1","$2","$3","$4","$5","$6",null,null,null,null,null,"$7",null,"$8 }' )
         nd=$(date '+%Y-%m-%d %T' --date="@$((d + i))")
         echo "\"$nd\",$TEST_ID,$m,$line"
         ((i++))
@@ -559,24 +567,33 @@ parse_args $@
 echo will execute the command : iperf3 $IPERF3_ARGS
 echo over $TEST_RUNS test runs...
 
-  if [[ $IPERF3_LOCAL_RUN == 0 ]]
-  then
-    # will run iperf from the local command line
-	IPERF3_CMD="iperf3 $IPERF3_ARGS"
-  else
-    # start iperf server on remote host
-	echo starting iperf server on "$IPERF3_SERVER"
-	IPERF3_CMD="ssh $IPERF3_SERVER_USER@$IPERF3_SERVER 'iperf3 -s -p $IPERF3_PORT -D'"
-	echo will execute $IPERF3_CMD
-	eval $IPERF3_CMD
-	# will run iperf from remote host
-	IPERF3_CMD="ssh $IPERF3_CLIENT_USER@$IPERF3_CLIENT 'iperf3 $IPERF3_ARGS'"
-  fi
+if [[ $IPERF3_LOCAL_RUN == 0 ]]
+then
+  # will run iperf from the local command line
+  IPERF3_CMD="iperf3 $IPERF3_ARGS"
+else
+  # start iperf server on remote host
+  echo starting iperf server on "$IPERF3_SERVER"
+  IPERF3_CMD="ssh $IPERF3_SERVER_USER@$IPERF3_SERVER 'iperf3 -s -p $IPERF3_PORT -D'"
+  echo will execute $IPERF3_CMD
+  eval $IPERF3_CMD
+  # will run iperf from remote host
+  IPERF3_CMD="ssh $IPERF3_CLIENT_USER@$IPERF3_CLIENT 'iperf3 $IPERF3_ARGS'"
+fi
 
+#update general info table
+update_iperf3_general_info
 
 #Cycle through the test runs
 for ((m = 1 ; m <= $TEST_RUNS ; m++))
 do
+
+  # Check if ping tests are run in parallel, and run them in a separate thread...
+  if [[ $IPERF3_RUN_PING == 1 ]]
+    then
+    ./ping_test.sh $IPERF3_SERVER $IPERF3_TIME $m $TEST_ID &
+  fi
+ 
   d=$(date '+%s')
   echo "Test run: $m"
   echo will execute $IPERF3_CMD
@@ -601,7 +618,9 @@ do
     # echo $START_JSON
 	update_iperf3_start "$START_JSON" "1" 
   fi
+  
 
+  #update intervals tables
   update_iperf3_intervals "$TOTAL_JSON" "$m"
   
   i=0
@@ -616,12 +635,29 @@ do
   #echo intervals sum data for test run $m
   #echo $INTERVALS_SUM_JSON
   
-  #Print out 'end' data in
+  #Print out 'end' data
   
   echo "test run $m end"
   END_JSON=$(echo $TOTAL_JSON | $(echo $PATH_TO_JQ) -r '.end ')
   # echo $END_JSON
   update_iperf3_end "$END_JSON" "$m"
   
-  sleep $IPERF3_TEST_RUN_DELAY
+  eval "$(sleep $IPERF3_TEST_RUN_DELAY)"
 done
+
+# test complete 
+# clean-up
+rm tmp.csv
+rm tmp2.csv
+
+if [[ $IPERF3_LOCAL_RUN == 1 ]]
+  then
+  #kill any iperf server processes
+  IPERF3_CMD="ssh $IPERF3_SERVER_USER@$IPERF3_SERVER 'pkill iperf3'"
+  echo will execute $IPERF3_CMD
+  eval $IPERF3_CMD
+fi
+
+################################################################################################
+# End Main Routine                                                                             #
+################################################################################################
