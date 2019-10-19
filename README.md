@@ -4,3 +4,6 @@ The data grabber captures output from the well-known iperf3 traffic genereator t
 - the create-table script, which generates the initial database structure,
 - a ping_test script, which allows for concurrent ping tests between iperf3 client and server,
 - an iperf3 data grabber json file, which contains a grafana sample dashboard.
+
+Details are given here: https://github.com/bloxix/iperf3-data-grabber/blob/master/IPerf3%20Data%20Grabber.pdf 
+

@@ -1,16 +1,16 @@
 # here somne additional things to be done, possibly in this release:
-- kill server processes at the end of the test (done, not tested)
-- add ping tests in a mysql table... (ongoing)
-- add time column to end tables and update grabber script
+- kill server processes at the end of the test (done in version 0.15)
+- add ping tests in a mysql table (done in version 0.15)
+- add time column to end tables and update grabber script (done in version 0.15)
 - add new version flag
-- add Grafana dashboard panels
-- update existing Grafana dashboards
-- use standalone conf file
+- add Grafana dashboard panels (ongoing in version 0.15)
+- update existing Grafana dashboards (ongoing in version 0.15)
+- use standalone conf file, add mysql config table
 - add some php-admin for mysql
 - optimize code
 - address udp errors
-- update wiki
-- exit after ssh errors?
+- update wiki (ongoing in version 0.15)
+- exit after ssh errors? (dump json in case of error in json in version 0.15)
 - add sctp protocol
 - add native iperf switches
 - update help
