@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1570777431809,
+  "id": 11,
+  "iteration": 1574429598625,
   "links": [],
   "panels": [
     {
@@ -287,7 +287,7 @@
         {},
         {
           "alias": "udp sum",
-          "yaxis": 2
+          "yaxis": 1
         }
       ],
       "spaceLength": 10,
@@ -1019,7 +1019,7 @@
           "group": [
             {
               "params": [
-                "$__interval",
+                "1s",
                 "none"
               ],
               "type": "time"
@@ -1061,7 +1061,7 @@
           "group": [
             {
               "params": [
-                "$__interval",
+                "1s",
                 "none"
               ],
               "type": "time"
@@ -1598,7 +1598,7 @@
       "renderer": "flot",
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1570777431809,
+      "repeatIteration": 1574429598625,
       "repeatPanelId": 12,
       "scopedVars": {
         "socket": {
@@ -1856,7 +1856,7 @@
       "renderer": "flot",
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1570777431809,
+      "repeatIteration": 1574429598625,
       "repeatPanelId": 12,
       "scopedVars": {
         "socket": {
@@ -2084,8 +2084,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "1570788607",
-          "value": "1570788607"
+          "text": "1574429134",
+          "value": "1574429134"
         },
         "datasource": "MySQL",
         "definition": "select test_id from iperf3_general_info order by test_time desc limit 1;",
@@ -2109,8 +2109,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "TCP",
-          "value": "TCP"
+          "text": "UDP",
+          "value": "UDP"
         },
         "datasource": "MySQL",
         "definition": "select protocol from iperf3_start_test_start order by test_id desc limit 1;",
@@ -2206,7 +2206,7 @@
     ]
   },
   "timezone": "",
-  "title": "IPerf 3 Data Grabber version 0.15",
+  "title": "IPerf 3 Data Grabber version 0.16",
   "uid": "3loyE3FWk",
-  "version": 68
+  "version": 3
 }

@@ -1,0 +1,129 @@
+# Build the base  grabber container
+
+# GRABBER DOCKERFILE
+FROM ubuntu:latest
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install wget -y
+RUN apt-get install -y net-tools
+RUN apt-get install -y iputils-ping
+RUN apt-get install -y sudo
+RUN apt-get install -y wget
+RUN apt-get install -y dpkg
+RUN apt-get install -y curl
+RUN apt-get install -y systemd
+RUN apt install openssh-server -y
+RUN apt-get install jq -y
+RUN apt-get install -y mysql-server
+RUN apt-get install -y apache2 php mysql-server
+RUN apt-get install -y phpmyadmin
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y adduser libfontconfig1
+RUN apt-get install -y vim
+RUN apt-get install -y iperf3
+
+#add users
+# as root
+useradd -s /bin/bash -d /home/grabber -m grabber
+passwd grabber
+echo "grabber ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/grabber
+su grabber
+
+useradd -s /bin/bash -d /home/iperf3 -m iperf3
+passwd iperf3
+echo "iperf3 ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/iperf3
+su iperf3
+
+
+# install grafana
+
+wget https://dl.grafana.com/oss/release/grafana_6.4.4_amd64.deb
+sudo dpkg -i grafana_6.4.4_amd64.deb
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+rm grafana_6.4.4_amd64.deb
+
+
+# configure mysql
+# https://dev.mysql.com/doc/refman/8.0/en/resetting-permissions.html
+
+sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+
+grabber@grabber:~$ cat mysql-init
+vi mysql-init #add the line below
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Heiko123*';
+
+sudo mysqld --init-file=/home/grabber/mysql-init &
+
+sudo service mysql start
+sudo mysql -u root -p  # enter password Heiko123*
+#now add users
+CREATE USER 'iperf3'@'localhost' IDENTIFIED BY 'Iperf321*';
+CREATE USER 'iperf3'@'%' IDENTIFIED BY 'Iperf321*';
+
+# Then
+
+GRANT ALL ON *.* TO 'iperf3'@'localhost';
+GRANT ALL ON *.* TO 'iperf3'@'%';
+flush privileges;  
+  
+CREATE USER 'grabber'@'localhost' IDENTIFIED BY 'Iperf321*';
+CREATE USER 'grabber'@'%' IDENTIFIED BY 'Iperf321*';
+
+# Then
+
+GRANT ALL ON *.* TO 'grabber'@'localhost';
+GRANT ALL ON *.* TO 'grabber'@'%';
+flush privileges;  
+exit
+
+mysql -u iperf3 -p
+
+#add start_grabber.sh
+
+sudo vi ~/grabber-16.sh
+
+#!/bin/bash
+# startup processes in the grabber container
+cd ~/
+sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+sudo service grafana-server start
+sudo service ssh start
+sudo service mysql start
+sudo service apache2 start
+
+chmod +x ~/grabber-16.sh
+
+#Configure phpmyadmin
+
+Follow instructions as given here (change line 613...) https://stackoverflow.com/questions/48001569/phpmyadmin-count-parameter-must-be-an-array-or-an-object-that-implements-co
+https://stackoverflow.com/questions/8868790/localhost-or-phpmyadmin-not-found-on-server-how-to-fix
+
+sudo vi /etc/apache2/apache2.conf
+# search insert: "Include /etc/phpmyadmin/apache.conf" at the bottom of file. and restart apache2
+
+# sudo /etc/init.d/apache2 restart
+./start_grabber.sh
+
+# copy the grabber.sh, ping_test.sh and create_tables.sh files and make them executable. Execute create_table
+./create_tables.sh
+
+# Start grafana and import the dashboard json.
+
+#Run the container
+docker run -it --user=grabber --hostname=grabber -p 3000:3000 -p 80:80 bloxix/iperf3-data-grabber:v016 /bin/bash 
+
+#Copy all scripts to the grabber home directory
+cd ~
+
+# copy create_tables.sh, grabber-16.sh, ping_test.sh, start_grabber.sh, upload-config.sh
+# start the grabber
+./start_grabber.sh
+
+# create database and tables
+./create_tables.sh
+
+# upload-config
+./upload-config.sh
+

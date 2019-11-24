@@ -2,18 +2,18 @@
 - kill server processes at the end of the test (done in version 0.15)
 - add ping tests in a mysql table (done in version 0.15)
 - add time column to end tables and update grabber script (done in version 0.15)
-- add new version flag
+- add new version flag (done in version 0.16)
 - add Grafana dashboard panels (ongoing in version 0.15)
-- update existing Grafana dashboards (ongoing in version 0.15)
+- update existing Grafana dashboards (ongoing in version 0.15), corrected udp average packets mapped to left Y-axis.
 - use standalone conf file, add mysql config table
 - add some php-admin for mysql
 - optimize code
-- address udp errors
+- address udp errors (solved by iperf3 versions > 3.1.3)
 - update wiki (ongoing in version 0.15)
-- exit after ssh errors? (dump json in case of error in json in version 0.15)
-- add sctp protocol
-- add native iperf switches
+- exit after ssh errors? (dump json in case of error in json in version 0.15), add 'exit on error' flag, added in version 0.16
+- add sctp protocol (no --sctp in cli parameters???), couldn't get sctp to work in iperf3 :(
+- add native iperf switches, solved issues with arguments parsing and the -o option in version 0.16
 - update help
 - standalone conf file
-- add Grafana metrics
-- add Grafana variables
+- add Grafana metrics, Grafana variables
+- Rebuild Container for version 0.16

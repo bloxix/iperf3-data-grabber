@@ -1,0 +1,349 @@
+FROM bloxix/iperf3-data-grabber:v015
+
+sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
+sudo service grafana-server start && \
+sudo service ssh start && \
+sudo service mysql start && \
+sudo service apache2 start
+	
+
+#start_grabber.sh
+#!/bin/bash
+# startup processes in the grabber container
+cd ~/
+sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+sudo service grafana-server start
+sudo service ssh start
+sudo service mysql start
+sudo service apache2 start
+
+
+    1  cd ~
+    2  exit
+    3  cd ~
+    4  wget https://dl.grafana.com/oss/release/grafana_6.3.2_amd64.deb
+    5  sudo apt-get install wget -y
+    6  sudo apt-get install dpkg -y
+    7  wget https://dl.grafana.com/oss/release/grafana_6.3.2_amd64.deb
+    8  sudo dpkg -i grafana_6.3.2_amd64.deb
+    9  sudo apt-get install -y adduser libfontconfig1
+   10  sudo apt-get --fix-broken install
+   11  sudo apt-get install -y adduser libfontconfig1
+   12  apt-get install -y software-properties-common
+   13  sudo apt-get install -y software-properties-common
+   14  sudo hostname data_grabber
+   15  sudo hostname
+   16  sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+   17  wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+   18  sudo apt-get update
+   19  sudo apt-get install grafana
+   20  sudo service grafana-server start
+   21  sudo systemctl enable grafana-server.service
+   22  sudo apt-get install systemctl
+   23  sudo apt-get install systemd
+   24  sudo systemctl enable grafana-server.service
+   25  netstat -tulpn"| grep LISTEN
+   26  ;
+   27  netstat -tulpn | grep LISTEN
+   28  ip a
+   29  ifconfig
+   30  exit
+   31  cd ~
+   32  sudo service grafana-server start
+   33  sudo apt install mysql-server
+   34  sudo apt-get update
+   35  ping 8.8.8.8
+   36  ping 192.168.0.1
+   37  ip route
+   38  sudo apt-get update
+   39  sudo apt install mysql-server
+   40  sudo netstat -tap | grep mysql
+   41  sudo service mysql start
+   42  sudo netstat -tap | grep mysql
+   43  mysql -u root -p
+   44  mysql -u root
+   45  mysqladmin -u root Heiko123*
+   46  sudo mysqladmin -u root Heiko123*
+   47  sudo mysqladmin -u root -p
+   48  mysql -u root -p
+   49  ls -ll
+   50  ls -lh
+   51  vi ~/mysql-pwd
+   52  sudo apt-get install vi
+   53  sudo apt-get install vim
+   54  vi ~/mysql-pwd
+   55  sudo systemctl stop mysql
+   56  sudo service mysql stop
+   57  sudo mysqld -init-file=~/mysql-pwd
+   58  sudo mysqld_safe --skip-grant-tables --skip-networking &
+   59  mysql -u root
+   60  mysql -u root p
+   61  service mysql restart
+   62  sudo service mysql restart
+   63  mysql -u root p
+   64  sudo mysql -u root p
+   65  cat mysql-pwd
+   66  mysql -u root
+   67  exit
+   68  mysql -u iperf3 -p
+   69  cd ~
+   70  ls
+   71  rm grafana_6.3.2_amd64.deb
+   72  ls
+   73  mkdir iperf3
+   74  cd iperf3
+   75  vi create_tables-015.sh
+   76  ls
+   77  chmod + create_tables-015.sh
+   78  chmod +x create_tables-015.sh
+   79  ls
+   80  ./create_tables-015.sh
+   81  vi create_tables-015.sh
+   82  ./create_tables-015.sh
+   83  mysql -u iperf3 -p
+   84  wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
+   85  ping 8.8.8.8
+   86  wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
+   87  https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
+   88  wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
+   89  sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+   90  which iperf3
+   91  iperf3 -s
+   92  exit
+   93  cd ~
+   94  cd iperf3
+   95  ls
+   96  rm iperf3_3.1.3-1_amd64.deb libiperf0_3.1.3-1_amd64.deb
+   97  vi ping_test.sh
+   98  vi t15.sh
+   99  ls
+  100  chmod +x ping_test.sh t15.sh
+  101  ssh-keygen
+  102  apt-get install ssh-keygen -y
+  103  sudo apt-get install ssh-keygen -y
+  104  ./t15.sh
+  105  vi t15.sh
+  106  ./t15.sh
+  107  ./t15.sh -c 127.0.0.1
+  108  sudo apt-get install ssh
+  109  ./t15.sh -c 127.0.0.1
+  110  sudo apt-get install openssh-server
+  111  vi t15.sh
+  112  ./t15.sh -c 192.168.0.50
+  113  vi t15.sh
+  114  ./t15.sh -c 192.168.0.50
+  115  exit
+  116  cd ~
+  117  vi start_grabber.sh
+  118  chmod +x start_grabber.sh
+  119  cd iperf3
+  120  vi t15.sh
+  121  exit
+  122  history
+iperf3@grabber:/$
+
+root@grabber:~# history
+    1  apt
+    2  ping 8.8.8.8
+    3  apt install nettools
+    4  apt install net-tools
+    5  apt-get update
+    6  apt-get install net-tools
+    7  ping 8.8.8.8
+    8  apt-get install -y iputils-ping
+    9  ping 8.8.8.8
+   10  hostname datagrabber
+   11  whoami
+   12  apt-get install sudo
+   13  useradd -s /bin/bash -d /home/iperf3 -m iperf3
+   14  passwd iperf3
+   15  echo "iperf3 ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/iperf3
+   16  su iperf3
+   17  exit
+   18  su iperf3
+   19  exit
+   20  su iperf3
+   21  exit
+   22  service grafan-server status
+   23  service grafana-server status
+   24  service grafana-server start
+   25  service mysql status
+   26  service mysql start
+   27  netstat -tulpn | grep 3000
+   28  service grafana-server stop
+   29  service grafana-server start
+   30  netstat -tulpn | grep 3000
+   31  mysql -u iperf3 -p
+   32  mysql -u root -p
+   33  mysql -u iperf3 -p
+   34  service mysql stop
+   35  service mysql start
+   36  mysql -u iperf3 -p
+   37  exit
+   38  service grafana-server start
+   39  service mysql start
+   40  mysql -u root -p
+   41  mysql -u iperf3 -p
+   42  su iperf3
+   43  exit
+   44  service grafana-server start
+   45  service mysql start
+   46  ping 192.168.0.50
+   47  iperf3 -c 192.168.0.50
+   48  mysql -u iperf3 -p
+   49  sudo apt-get install jq
+   50  which jq
+   51  su iperf3
+   52  exit
+   53  history
+root@grabber:~#
+
+
+
+
+iperf3@ubuntu:~$ history
+    1  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    2  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    3  sudo apt-get update
+    4  apt-cache policy docker-ce
+    5  sudo apt-get install -y docker-ce
+    6  sudo systemctl status docker
+    7  sudo usermod -aG docker $USER
+    8  exit
+    9  docker -v
+   10  docker image list
+   11  docker ps -a
+   12  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v015 /bin/bash
+   13  docker run -it -p3000:3000 --hostname grabber bloxix/iperf3-data-grabber:v015 /bin/bash
+   14  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v015 /bin/bash
+   15  exit
+   16  ip a
+   17  vi /etc/network/interfaces
+   18  sudo vi /etc/network/interfaces
+   19  sudo service network restart
+   20  sudo service networking restart
+   21  ip a
+   22  sudo init 0
+   23  ping 8.8.8.8
+   24  docker image list
+   25  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v015 /bin/bash
+   26  docker ps
+   27  docker exec -it 995ce515ff1a /bin/bash
+   28  df -h
+   29  docker image list
+   30  ls
+   31  docker image list
+   32  vi Dockerfile
+   33  docker build -t iperf3-data-grabber:v0151 .
+   34  docker image list
+   35  vi Dockerfile
+   36  docker build -t iperf3-data-grabber:v0151 .
+   37  docker run -it -p3000:3000 --hostname grabber --user iperf3 iperf3-data-grabber:v0151 /bin/bash
+   38  docker run -it --hostname grabber --user iperf3 iperf3-data-grabber:v0151 /bin/bash
+   39  docker image list
+   40  docker image rm 590724facad9
+   41  ps -a
+   42  docker ps -a
+   43  docker ps kill f87be7179231
+   44  docker ps --help
+   45  docker rm f87be7179231
+   46  docker image list
+   47  docker image rm 590724facad9
+   48  docker rm 0c6a3138a0bd
+   49  docker image rm 590724facad9
+   50  docker image list
+   51  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v015 /bin/bash
+   52  ps -a
+   53  docker ps -a
+   54  docker rm e821e2202deb
+   55  docker rm 0b94b0119605
+   56  docker rm 995ce515ff1a
+   57  history | grep exec
+   58  docker exec -it 995ce515ff1a /bin/bash
+   59  docker stop 995ce515ff1a
+   60  docker rm 995ce515ff1a
+   61  docker ps -a
+   62  docker rm 3cab3c713470
+   63  docker rm 33f7eefef8be
+   64  docker rm ffdb298fee3d
+   65  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v015 /bin/bash
+   66  docker ps -a
+   67  docker commit e5dbbb0fc1fd iperf3-data-grabber:v0151
+   68  docker image list
+   69  vi Dockerfile
+   70  docker build -t iperf3-data-grabber:v0152 .
+   71  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0152 /bin/bash
+   72  docker run -it -p3000:3000 --hostname grabber --user iperf3 iperf3-data-grabber:v0152 /bin/bash
+   73  docker ps -a
+   74  docker rm
+   75  docker rm abf0a811205a
+   76  vi Dockerfile
+   77  docker build -t iperf3-data-grabber:v0152 .
+   78  docker run -it -p3000:3000 --hostname grabber --user iperf3 iperf3-data-grabber:v0152 /bin/bash
+   79  docker ps -a
+   80  docker image list
+   81  docker image rm b8833fbd8095
+   82  docker rm 13410e39610d
+   83  docker image rm b3a630f6aa02
+   84  docker image list
+   85  docker push f5aaf9d8d24f bloxix/iperf3-data-grabber:v0151
+   86  docker tag f5aaf9d8d24f bloxix/iperf3-data-grabber:v0151
+   87  docker image list
+   88  docker push f5aaf9d8d24f
+   89  docker image rm iperf3-data-grabber:v0151
+   90  docker image list
+   91  docker push f5aaf9d8d24f
+   92  docker push bloxix/iperf3-data-grabber:v0151
+   93  docker login
+   94  docker push bloxix/iperf3-data-grabber:v0151
+   95  sudo init 0
+   96  ip a
+   97  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+   98  sudo init 0
+   99  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  100  docker image list
+  101  sudo init 0
+  102  ip a
+  103  ping 8.8.8.8
+  104  ip link show
+  105  sudo vi /etc/network/interfaces
+  106  sudo systemctl restart networking.service
+  107  ip a
+  108  ping 8.8.8.8
+  109  docker image list
+  110  docker ps -a
+  111  docker rm fc90ab4bdf23
+  112  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  113  ls
+  114  docker ps -a
+  115  docker rm 412b7ef9f9c4
+  116  docker image list
+  117  docker image rm f5aaf9d8d24f
+  118  docker image rm 8fdcda5543a2
+  119  docker image list
+  120  sudo reboot
+  121  clear
+  122  ping 8.8.8.8
+  123  docker image list
+  124  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  125  exit
+  126  sudo init 0
+  127  ping 8.8.8.8
+  128  sudo init 0
+  129  ip a
+  130  ping 10.214.151.30
+  131  traceroute 10.214.151.30
+  132  ping -R google.com
+  133  ping 8.8.8.8
+  134  docker image list
+  135  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  136  exit
+  137  docker run -it -p 3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  138  docker run -it -p3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  139  exit
+  140  sudo init 0
+  141  docker run -it -p 3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
+  142  exit
+  143  ip a
+  144  sudo init 0
+  145  docker run -it -p 3000:3000 --hostname grabber --user iperf3 bloxix/iperf3-data-grabber:v0151 /bin/bash
